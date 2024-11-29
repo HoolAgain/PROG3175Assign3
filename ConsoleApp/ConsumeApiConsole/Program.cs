@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Text;
-using System.Net.Http.Headers;
 
 namespace ApiConsumerApp
 {
@@ -28,20 +27,14 @@ namespace ApiConsumerApp
                     HttpResponseMessage response = await client.GetAsync($"{apiBaseUrl}/api/GetAllTimesOfDay");
                     response.EnsureSuccessStatusCode();
                     string responseBody = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine("Raw Response (Times of Day): ");
-                    Console.WriteLine(responseBody);
                     var apiResponse = JsonConvert.DeserializeObject<ApiResponse<TimeOfDay>>(responseBody);
+
                     if (apiResponse?.Data != null && apiResponse.Data.Count > 0)
                     {
-                        Console.WriteLine("Available times of day:");
                         foreach (var time in apiResponse.Data)
                         {
                             Console.WriteLine(time.TimeOfDayValue);
                         }
-                    }
-                    else
-                    {
-                        Console.WriteLine("No times of day available.");
                     }
                 }
                 catch (Exception ex)
@@ -60,20 +53,14 @@ namespace ApiConsumerApp
                     HttpResponseMessage response = await client.GetAsync($"{apiBaseUrl}/api/GetSupportedLanguages");
                     response.EnsureSuccessStatusCode();
                     string responseBody = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine("Raw Response (Supported Languages): ");
-                    Console.WriteLine(responseBody);
                     var apiResponse = JsonConvert.DeserializeObject<ApiResponse<Language>>(responseBody);
+
                     if (apiResponse?.Data != null && apiResponse.Data.Count > 0)
                     {
-                        Console.WriteLine("Supported languages:");
                         foreach (var language in apiResponse.Data)
                         {
                             Console.WriteLine(language.LanguageName);
                         }
-                    }
-                    else
-                    {
-                        Console.WriteLine("No supported languages available.");
                     }
                 }
                 catch (Exception ex)
@@ -122,14 +109,10 @@ namespace ApiConsumerApp
                     if (response.IsSuccessStatusCode)
                     {
                         string responseBody = await response.Content.ReadAsStringAsync();
-                        Console.WriteLine("Raw API Response:");
-                        Console.WriteLine(responseBody);
-
                         var result = JsonConvert.DeserializeObject<GreetingResponse>(responseBody);
 
                         if (result != null && !string.IsNullOrEmpty(result.GreetingMessage))
                         {
-                            Console.WriteLine("Greeting Message:");
                             Console.WriteLine(result.GreetingMessage);
                         }
                         else
@@ -137,7 +120,11 @@ namespace ApiConsumerApp
                             Console.WriteLine("No greeting message found in the response.");
                         }
                     }
-
+                    else
+                    {
+                        string errorResponse = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine(errorResponse);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -145,13 +132,6 @@ namespace ApiConsumerApp
                 }
             }
         }
-
-        public class GreetingResponse
-        {
-            [JsonProperty("greetingMessage")]
-            public string GreetingMessage { get; set; }
-        }
-
     }
 
     public class ApiResponse<T>
@@ -170,5 +150,11 @@ namespace ApiConsumerApp
     {
         [JsonProperty("language")]
         public string LanguageName { get; set; }
+    }
+
+    public class GreetingResponse
+    {
+        [JsonProperty("greetingMessage")]
+        public string GreetingMessage { get; set; }
     }
 }
