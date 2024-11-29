@@ -122,6 +122,9 @@ namespace ApiConsumerApp
                     if (response.IsSuccessStatusCode)
                     {
                         string responseBody = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine("Raw API Response:");
+                        Console.WriteLine(responseBody);
+
                         var result = JsonConvert.DeserializeObject<GreetingResponse>(responseBody);
 
                         if (result != null && !string.IsNullOrEmpty(result.GreetingMessage))
@@ -134,12 +137,7 @@ namespace ApiConsumerApp
                             Console.WriteLine("No greeting message found in the response.");
                         }
                     }
-                    else
-                    {
-                        Console.WriteLine($"Error: {response.StatusCode}");
-                        string errorResponse = await response.Content.ReadAsStringAsync();
-                        Console.WriteLine(errorResponse);
-                    }
+
                 }
                 catch (Exception ex)
                 {
