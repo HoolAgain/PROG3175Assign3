@@ -102,9 +102,9 @@ namespace ApiConsumerApp
 
             var requestBody = new
             {
-                timeOfDay = timeOfDay,
-                language = language,
-                tone = tone
+                timeOfDay = timeOfDay.Trim(),
+                language = language.Trim(),
+                tone = tone.Trim()
             };
 
             string jsonBody = System.Text.Json.JsonSerializer.Serialize(requestBody);
@@ -117,13 +117,22 @@ namespace ApiConsumerApp
 
                 try
                 {
-                    HttpResponseMessage response = await client.PostAsync(apiBaseUrl + "/Greet", content);
+                    HttpResponseMessage response = await client.PostAsync($"{apiBaseUrl}/Greet", content);
 
                     if (response.IsSuccessStatusCode)
                     {
                         string responseBody = await response.Content.ReadAsStringAsync();
-                        Console.WriteLine("Response received:");
-                        Console.WriteLine(responseBody);
+                        var result = JsonConvert.DeserializeObject<GreetingResponse>(responseBody);
+
+                        if (result != null && !string.IsNullOrEmpty(result.GreetingMessage))
+                        {
+                            Console.WriteLine("Greeting Message:");
+                            Console.WriteLine(result.GreetingMessage);
+                        }
+                        else
+                        {
+                            Console.WriteLine("No greeting message found in the response.");
+                        }
                     }
                     else
                     {
@@ -138,6 +147,13 @@ namespace ApiConsumerApp
                 }
             }
         }
+
+        public class GreetingResponse
+        {
+            [JsonProperty("greetingMessage")]
+            public string GreetingMessage { get; set; }
+        }
+
     }
 
     public class ApiResponse<T>
