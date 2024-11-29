@@ -1,12 +1,11 @@
 const express = require('express');
-const sqlite = require('sqlite');
-const sqlite3 = require('sqlite3');
+const { Pool } = require('pg');
 const path = require('path');
-const GreetingRequest = require('./models/GreetingRequest');
-const GreetingResponse = require('./models/GreetingResponse');
+require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 8080;
+
 const greetingsData = [
     ['Morning', 'English', 'Good morning!', 'Formal'],
     ['Afternoon', 'English', 'Good afternoon!', 'Formal'],
@@ -39,78 +38,85 @@ app.get('/about', (req, res) => {
     res.sendFile(path.join(__dirname, '/views/about.html'));
 });
 
-// Open the SQLite database
-let db;
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: process.env.DATABASE_URL.includes('localhost') ? false : { rejectUnauthorized: false }
+});
+
 (async () => {
-    db = await sqlite.open({
-        filename: './data/database.db',
-        driver: sqlite3.Database
-    });
-
-    //here in case of fire, push the red button and reset table
-    await db.exec('DROP TABLE IF EXISTS greetings');
-
-    // Create a 'greetings' table if it doesn't exist
-    await db.exec(`
-    CREATE TABLE IF NOT EXISTS greetings (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      timeOfDay TEXT NOT NULL,
-      language TEXT NOT NULL,
-      greetingMessage TEXT,
-      tone TEXT NOT NULL
-    )
-  `);
-
-    // Seed the 'greetings' table
-    const insertQuery = `
-        INSERT INTO greetings (timeOfDay, language, greetingMessage, tone)
-        VALUES (?, ?, ?, ?)`;
-
-    for (const greeting of greetingsData) {
-        await db.run(insertQuery, greeting);
+    try {
+        const client = await pool.connect();
+        console.log('Connected to PostgreSQL');
+        client.release();
+    } catch (err) {
+        console.error('Failed to connect to PostgreSQL:', err);
     }
 })();
 
-// GET all timesOfDay
+(async () => {
+    try {
+        await pool.query('DROP TABLE IF EXISTS greetings');
+        await pool.query(`
+            CREATE TABLE greetings (
+                id SERIAL PRIMARY KEY,
+                timeOfDay TEXT NOT NULL,
+                language TEXT NOT NULL,
+                greetingMessage TEXT,
+                tone TEXT NOT NULL
+            )
+        `);
+
+        const insertQuery = `
+            INSERT INTO greetings (timeOfDay, language, greetingMessage, tone)
+            VALUES ($1, $2, $3, $4)
+        `;
+        for (const greeting of greetingsData) {
+            await pool.query(insertQuery, greeting);
+        }
+
+        console.log('Database initialized and seeded');
+    } catch (err) {
+        console.error('Error setting up database:', err);
+    }
+})();
+
+// API routes
 app.get('/api/GetAllTimesOfDay', async (req, res) => {
     try {
-        const timesOfDay = await db.all('SELECT DISTINCT timeOfDay FROM greetings');
+        const { rows: timesOfDay } = await pool.query('SELECT DISTINCT timeOfDay FROM greetings');
         res.json({ message: 'success', data: timesOfDay });
     } catch (error) {
+        console.error('Error fetching times of day:', error);
         res.status(500).json({ error: error.message });
     }
 });
 
-// GET all supported languages
 app.get('/api/GetSupportedLanguages', async (req, res) => {
     try {
-        const languages = await db.all('SELECT DISTINCT language FROM greetings');
+        const { rows: languages } = await pool.query('SELECT DISTINCT language FROM greetings');
         res.json({ message: 'success', data: languages });
     } catch (error) {
+        console.error('Error fetching supported languages:', error);
         res.status(500).json({ error: error.message });
     }
 });
 
-// POST a new greeting
 app.post('/Greet', async (req, res) => {
     try {
         const { timeOfDay, language, tone } = req.body;
-        const greetingRequest = new GreetingRequest(timeOfDay, language, tone);
 
-        const result = await db.get(`
+        const { rows } = await pool.query(`
             SELECT greetingMessage
             FROM greetings
-            WHERE timeOfDay = ? AND language = ? AND tone = ?`,
-            [greetingRequest.timeOfDay, greetingRequest.language, greetingRequest.tone]
-        );
+            WHERE timeOfDay = $1 AND language = $2 AND tone = $3
+        `, [timeOfDay, language, tone]);
 
-        if (!result) {
+        if (rows.length === 0) {
             res.status(404).json({
-                greetingMessage: `No greeting found for ${greetingRequest.timeOfDay} in ${greetingRequest.language} with a ${greetingRequest.tone} tone`
+                greetingMessage: `No greeting found for ${timeOfDay} in ${language} with a ${tone} tone`
             });
         } else {
-            const greetingResponse = new GreetingResponse(result.greetingMessage);
-            res.json(greetingResponse);
+            res.json({ greetingMessage: rows[0].greetingMessage });
         }
     } catch (error) {
         console.error('Error processing request:', error);
@@ -118,7 +124,6 @@ app.post('/Greet', async (req, res) => {
     }
 });
 
-// Start the server
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
