@@ -6,7 +6,7 @@ https://github.com/HoolAgain/PROG3175Assign3.git
 Postman Input and Outputs
 
 GetAllTimesOfDay
-http://localhost:8080/api/GetAllTimesOfDay
+https://prog-3175-assign3.vercel.app/api/GetAllTimesOfDay
 
 {
     "message": "success",
@@ -24,7 +24,7 @@ http://localhost:8080/api/GetAllTimesOfDay
 } 
 
 GetSupportedLanguages
-http://localhost:8080/api/GetSupportedLanguages
+https://prog-3175-assign3.vercel.app/api/GetSupportedLanguages
 
 {
     "message": "success",
@@ -42,7 +42,7 @@ http://localhost:8080/api/GetSupportedLanguages
 }
 
 Greet
-http://localhost:8080/Greet
+https://prog-3175-assign3.vercel.app/Greet
 
 RequestBody:
 {

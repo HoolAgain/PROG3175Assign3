@@ -31,6 +31,7 @@ namespace ApiConsumerApp
 
                     if (apiResponse?.Data != null && apiResponse.Data.Count > 0)
                     {
+                        Console.WriteLine("Possible Times Of Day:");
                         foreach (var time in apiResponse.Data)
                         {
                             Console.WriteLine(time.TimeOfDayValue);
@@ -57,6 +58,7 @@ namespace ApiConsumerApp
 
                     if (apiResponse?.Data != null && apiResponse.Data.Count > 0)
                     {
+                        Console.WriteLine("Supported Languages:");
                         foreach (var language in apiResponse.Data)
                         {
                             Console.WriteLine(language.LanguageName);
