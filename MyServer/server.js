@@ -56,13 +56,18 @@ app.get('/api/GetSupportedLanguages', async (req, res) => {
 
 app.post('/Greet', async (req, res) => {
     try {
+        console.log('Request body:', req.body);
         const { timeOfDay, language, tone } = req.body;
+
+        console.log('Inputs:', { timeOfDay, language, tone });
 
         const { rows } = await pool.query(`
             SELECT greetingMessage
             FROM greetings
-            WHERE timeOfDay = $1 AND language = $2 AND tone = $3
+            WHERE LOWER(timeOfDay) = LOWER($1) AND LOWER(language) = LOWER($2) AND LOWER(tone) = LOWER($3)
         `, [timeOfDay, language, tone]);
+
+        console.log('Query result:', rows);
 
         if (rows.length === 0) {
             res.status(404).json({
