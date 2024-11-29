@@ -1,0 +1,17 @@
+C:\Projects\3175 Dist Apps\ConsoleApp\ConsumeApiConsole\bin\Debug\net9.0\ConsumeApiConsole.exe
+C:\Projects\3175 Dist Apps\ConsoleApp\ConsumeApiConsole\bin\Debug\net9.0\ConsumeApiConsole.deps.json
+C:\Projects\3175 Dist Apps\ConsoleApp\ConsumeApiConsole\bin\Debug\net9.0\ConsumeApiConsole.runtimeconfig.json
+C:\Projects\3175 Dist Apps\ConsoleApp\ConsumeApiConsole\bin\Debug\net9.0\ConsumeApiConsole.dll
+C:\Projects\3175 Dist Apps\ConsoleApp\ConsumeApiConsole\bin\Debug\net9.0\ConsumeApiConsole.pdb
+C:\Projects\3175 Dist Apps\ConsoleApp\ConsumeApiConsole\bin\Debug\net9.0\Newtonsoft.Json.dll
+C:\Projects\3175 Dist Apps\ConsoleApp\ConsumeApiConsole\obj\Debug\net9.0\ConsumeApiConsole.csproj.AssemblyReference.cache
+C:\Projects\3175 Dist Apps\ConsoleApp\ConsumeApiConsole\obj\Debug\net9.0\ConsumeApiConsole.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projects\3175 Dist Apps\ConsoleApp\ConsumeApiConsole\obj\Debug\net9.0\ConsumeApiConsole.AssemblyInfoInputs.cache
+C:\Projects\3175 Dist Apps\ConsoleApp\ConsumeApiConsole\obj\Debug\net9.0\ConsumeApiConsole.AssemblyInfo.cs
+C:\Projects\3175 Dist Apps\ConsoleApp\ConsumeApiConsole\obj\Debug\net9.0\ConsumeApiConsole.csproj.CoreCompileInputs.cache
+C:\Projects\3175 Dist Apps\ConsoleApp\ConsumeApiConsole\obj\Debug\net9.0\ConsumeA.86A37D0B.Up2Date
+C:\Projects\3175 Dist Apps\ConsoleApp\ConsumeApiConsole\obj\Debug\net9.0\ConsumeApiConsole.dll
+C:\Projects\3175 Dist Apps\ConsoleApp\ConsumeApiConsole\obj\Debug\net9.0\refint\ConsumeApiConsole.dll
+C:\Projects\3175 Dist Apps\ConsoleApp\ConsumeApiConsole\obj\Debug\net9.0\ConsumeApiConsole.pdb
+C:\Projects\3175 Dist Apps\ConsoleApp\ConsumeApiConsole\obj\Debug\net9.0\ConsumeApiConsole.genruntimeconfig.cache
+C:\Projects\3175 Dist Apps\ConsoleApp\ConsumeApiConsole\obj\Debug\net9.0\ref\ConsumeApiConsole.dll
