@@ -10,7 +10,7 @@ namespace ApiConsumerApp
 {
     class Program
     {
-        private static readonly string apiBaseUrl = "http://localhost:8080";
+        private static readonly string apiBaseUrl = "https://prog-3175-assign3.vercel.app";
 
         static async Task Main(string[] args)
         {
