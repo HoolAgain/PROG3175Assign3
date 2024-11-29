@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ConsumeApiConsole")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+75b0cf2eeef99c236f74b7f9bd9f472d9181810a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7ad0c4970b0594e9c39b5a3df8aaf5e6e56899d2")]
 [assembly: System.Reflection.AssemblyProductAttribute("ConsumeApiConsole")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ConsumeApiConsole")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
